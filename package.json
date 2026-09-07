@@ -11,6 +11,8 @@
     "validate": "office-addin-manifest validate manifest.xml",
     "start:word": "office-addin-debugging start manifest.xml desktop --app word --dev-server \"npm run dev\" --dev-server-port 3000",
     "start:powerpoint": "office-addin-debugging start manifest.xml desktop --app powerpoint --dev-server \"npm run dev\" --dev-server-port 3000",
+    "reload:word": "office-addin-debugging start manifest.xml desktop --app word --no-debug",
+    "reload:powerpoint": "office-addin-debugging start manifest.xml desktop --app powerpoint --no-debug",
     "stop": "office-addin-debugging stop manifest.xml"
   },
   "dependencies": {

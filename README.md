@@ -24,7 +24,9 @@
 初回サイドロードは以下のどちらかで行います。
 
 - Word/PowerPoint の「挿入」タブ → 「アドイン」→「マイアドインのアップロード」から `manifest.xml` を選択
-- または `npx office-addin-debugging start manifest.xml desktop --app word` （開発サーバーは起動不要なので `--dev-server` オプションは付けない）
+- または `npm run reload:word` / `npm run reload:powerpoint`（開発サーバーは起動せず、現在の `manifest.xml` を再サイドロードするだけ）
+
+`manifest.xml` を更新した後や、古い（localhostを指す）マニフェストが残っている場合は、上記のどちらかで読み直してください。Officeはマニフェストをローカルにコピーして保持するため、リポジトリ側を更新しただけでは自動的には反映されません。
 
 辞書を編集してもコードの再デプロイは不要です（`localStorage` に保存されるだけなので）。コード自体（検出ロジックやUI）を変更したときだけ push すれば、数十秒後には最新版が全ホストに反映されます。
 
