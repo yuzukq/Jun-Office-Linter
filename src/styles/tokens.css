@@ -1,0 +1,65 @@
+/*
+  Design note: this pane is a proofreading tool for Japanese academic text,
+  so its one signature element borrows from actual Japanese proofreading
+  marks (校正記号) — a red circle around the wrong word, an arrow to the
+  fix — rather than a generic red squiggly underline. Monospace is used
+  sparingly for counts/badges as a nod to genkō-yōshi (manuscript grid
+  paper), where one character occupies one square.
+
+  --paper/--ink are light-mode defaults; theme.ts overwrites them at
+  runtime from Office.context.officeTheme so the pane matches whatever
+  Office theme (including dark mode) the host is running.
+*/
+:root {
+  --paper: #fbf9f4;
+  --ink: #262220;
+  --muted: #8a8175;
+  --line: #ddd6c9;
+  --shu: #c7401f;
+  --shu-soft: #f7e4dc;
+  --shu-soft-strong: #f0cabb;
+
+  --font-ui:
+    -apple-system, 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Yu Gothic UI', system-ui, sans-serif;
+  --font-mono: ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --radius: 6px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --paper: #1e1b18;
+    --ink: #ede8e0;
+    --muted: #a79c8c;
+    --line: #3a352e;
+    --shu: #e2603b;
+    --shu-soft: rgba(226, 96, 59, 0.16);
+    --shu-soft-strong: rgba(226, 96, 59, 0.3);
+  }
+}
+
+/* Office stamps data-theme on the root when the user toggles theme manually;
+   it must win over the prefers-color-scheme guess in either direction. */
+:root[data-theme='light'] {
+  --paper: #fbf9f4;
+  --ink: #262220;
+  --muted: #8a8175;
+  --line: #ddd6c9;
+  --shu: #c7401f;
+  --shu-soft: #f7e4dc;
+  --shu-soft-strong: #f0cabb;
+}
+
+:root[data-theme='dark'] {
+  --paper: #1e1b18;
+  --ink: #ede8e0;
+  --muted: #a79c8c;
+  --line: #3a352e;
+  --shu: #e2603b;
+  --shu-soft: rgba(226, 96, 59, 0.16);
+  --shu-soft-strong: rgba(226, 96, 59, 0.3);
+}

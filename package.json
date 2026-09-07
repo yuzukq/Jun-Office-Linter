@@ -1,0 +1,33 @@
+{
+  "name": "jun-office-linter",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "oxlint",
+    "preview": "vite preview",
+    "validate": "office-addin-manifest validate manifest.xml",
+    "start:word": "office-addin-debugging start manifest.xml desktop --app word --dev-server \"npm run dev\" --dev-server-port 3000",
+    "start:powerpoint": "office-addin-debugging start manifest.xml desktop --app powerpoint --dev-server \"npm run dev\" --dev-server-port 3000",
+    "stop": "office-addin-debugging stop manifest.xml"
+  },
+  "dependencies": {
+    "react": "^19.2.8",
+    "react-dom": "^19.2.8"
+  },
+  "devDependencies": {
+    "@types/node": "^24.13.3",
+    "@types/office-js": "^1.0.608",
+    "@types/react": "^19.2.18",
+    "@types/react-dom": "^19.2.4",
+    "@vitejs/plugin-react": "^6.1.0",
+    "office-addin-debugging": "^6.1.2",
+    "office-addin-dev-certs": "^2.0.10",
+    "office-addin-manifest": "^2.1.6",
+    "oxlint": "^1.79.0",
+    "typescript": "~6.0.2",
+    "vite": "^8.2.2"
+  }
+}
