@@ -32,23 +32,6 @@ button {
   min-width: 260px;
 }
 
-/* Header */
-
-.app-header {
-  display: flex;
-  align-items: center;
-  gap: var(--space-2);
-  padding: var(--space-3) var(--space-4);
-  border-bottom: 1px solid var(--line);
-  flex-shrink: 0;
-}
-
-.app-title {
-  font-weight: 600;
-  font-size: 13px;
-  letter-spacing: 0.02em;
-}
-
 /* Tabs */
 
 .tabs {

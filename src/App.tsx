@@ -99,9 +99,8 @@ export function App() {
 
   return (
     <div className="app-shell">
-      <header className="app-header">
-        <span className="app-title">Jun Office Linter</span>
-      </header>
+      {/* No in-app title here: Office's own task pane chrome already shows
+          the add-in's DisplayName above this content. */}
       <div className="tabs">
         <button className={`tab-button ${tab === 'check' ? 'active' : ''}`} onClick={() => setTab('check')}>
           チェック
