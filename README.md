@@ -10,40 +10,40 @@
 - 辞書はブラウザの `localStorage` に保存され、Word/PowerPoint どちらでも同じ辞書を共有（JSONでインポート/エクスポート可）
 - 例外リスト（`exceptions`）で「この語を含む正しい複合語」を誤検出から除外可能
 
+## インストール
+
+このリポジトリを clone したり、Node/npm を用意したりする必要はありません。
+
+1. [Releases](https://github.com/yuzukq/Jun-Office-Linter/releases/latest) から `manifest.xml` をダウンロード
+2. Word または PowerPoint を開く
+3. 「挿入」タブ →「アドイン」→「マイアドインのアップロード」から、ダウンロードした `manifest.xml` を選択
+
+これだけで、リボンに「誤変換チェック」ボタンが追加されます。アドイン本体は GitHub Pages
+(`https://yuzukq.github.io/Jun-Office-Linter/`) から配信され、`main` への push のたびに自動更新されるので、
+一度サイドロードすればそれ以降は何もする必要がありません（ローカルでNode/Viteを動かし続ける必要はありません）。
+
+コードを更新したのにタスクペインの表示が古いままの場合は、Word/PowerPoint を完全に終了（Cmd+Q）してから開き直してください。WebViewが以前の内容をキャッシュしていることがあります。マニフェスト自体（URLなど）を更新した場合は、Releasesから最新の `manifest.xml` を取り直してアップロードし直してください。
+
 ## 既知の制限
 
 - Word: 本文・ヘッダー/フッターはスキャンしますが、脚注・文末脚注・floating テキストボックス内のテキストは対象外です。
 - PowerPoint: スライド上のシェイプのテキストはスキャンしますが、スピーカーノートおよび2階層以上ネストしたグループ内シェイプは対象外です。
 - 誤検出除外の例外リストは文字列一致ベースの簡易実装です。複雑な文脈判定はできません。
 
-## 普段使い（GitHub Pages）
+## 辞書の編集
 
-このアドインは完全に静的なファイルなので、`main` ブランチに push すると GitHub Actions (`.github/workflows/deploy.yml`) が自動でビルドして GitHub Pages
-(`https://yuzukq.github.io/Jun-Office-Linter/`) に公開します。`manifest.xml` はこの固定URLを指しているので、**一度サイドロードすれば、それ以降はローカルでNodeやVite devサーバーを起動する必要はありません**。PowerPointの裏でNodeが動いている、という状態を維持しなくても常に使えます。
+タスクペイン上部の「辞書」タブから、禁止語・正しい語・メモを登録できます。研究テーマ全体で使う用語集なので、文書単位ではなくブラウザ（Officeアプリ）単位で保存されます。別のPCでも使いたい場合は「エクスポート」でJSONを書き出し、そちらで「インポート」してください。
 
-初回サイドロードは以下のどちらかで行います。
-
-- Word/PowerPoint の「挿入」タブ → 「アドイン」→「マイアドインのアップロード」から `manifest.xml` を選択
-- または `npm run reload:word` / `npm run reload:powerpoint`（開発サーバーは起動せず、現在の `manifest.xml` を再サイドロードするだけ）
-
-`manifest.xml` を更新した後や、古い（localhostを指す）マニフェストが残っている場合は、上記のどちらかで読み直してください。Officeはマニフェストをローカルにコピーして保持するため、リポジトリ側を更新しただけでは自動的には反映されません。
-
-辞書を編集してもコードの再デプロイは不要です（`localStorage` に保存されるだけなので）。コード自体（検出ロジックやUI）を変更したときだけ push すれば、数十秒後には最新版が全ホストに反映されます。
-
-手動でマニフェストの妥当性だけ確認したい場合:
-
-```sh
-npm run validate
-```
+デフォルトの辞書は `src/core/defaultRules.ts` にあります。
 
 ## 開発（コードを変更する場合）
-
-コードを触ってすぐ確認したいときは、ローカルの Vite dev サーバーを使うと GitHub Pages へのデプロイを待たずに動作確認できます。
 
 ```sh
 npm install
 npx office-addin-dev-certs install   # 初回のみ。ローカル用HTTPS証明書を信頼済みにする
 ```
+
+コードを触ってすぐ確認したいときは、ローカルの Vite dev サーバーを使うと GitHub Pages へのデプロイを待たずに動作確認できます。
 
 ```sh
 npm run start:word         # Word で試す場合
@@ -58,11 +58,18 @@ npm run start:powerpoint   # PowerPoint で試す場合
 npm run stop
 ```
 
-## 辞書の編集
+現在の（GitHub Pagesを指す）`manifest.xml` を、開発サーバーなしで再サイドロードしたいだけの場合:
 
-タスクペイン上部の「辞書」タブから、禁止語・正しい語・メモを登録できます。研究テーマ全体で使う用語集なので、文書単位ではなくブラウザ（Officeアプリ）単位で保存されます。別のPCでも使いたい場合は「エクスポート」でJSONを書き出し、そちらで「インポート」してください。
+```sh
+npm run reload:word
+npm run reload:powerpoint
+```
 
-デフォルトの辞書は `src/core/defaultRules.ts` にあります。
+マニフェストの妥当性だけ確認したい場合:
+
+```sh
+npm run validate
+```
 
 ## プロジェクト構成
 
@@ -79,4 +86,7 @@ manifest.xml   Word (Document) / PowerPoint (Presentation) 両方を宣言
 
 ## デプロイの仕組み
 
-`npm run build` で `dist/` に静的ファイルが出力され、`main` への push をトリガーに GitHub Actions がこれをビルドして GitHub Pages に公開します（Microsoft 365アカウントでのAppSource公開は不要です。個人利用のためリポジトリは public にしていますが、辞書データ自体はコードに含まれずローカルの `localStorage` にのみ保存されます）。
+`main` への push をトリガーに、GitHub Actions (`.github/workflows/deploy.yml`) が以下を自動で行います（Microsoft 365アカウントでのAppSource公開は不要です。個人利用のためリポジトリは public にしていますが、辞書データ自体はコードに含まれずローカルの `localStorage` にのみ保存されます）。
+
+- `npm run build` で `dist/` を生成し、GitHub Pages に公開
+- `manifest.xml` を [Releases](https://github.com/yuzukq/Jun-Office-Linter/releases/latest) の `latest` リリースに添付（毎回上書き更新）

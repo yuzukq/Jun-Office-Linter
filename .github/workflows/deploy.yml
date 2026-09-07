@@ -5,11 +5,6 @@ on:
     branches: [main]
   workflow_dispatch:
 
-permissions:
-  contents: read
-  pages: write
-  id-token: write
-
 concurrency:
   group: pages
   cancel-in-progress: true
@@ -17,6 +12,8 @@ concurrency:
 jobs:
   build:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -32,9 +29,37 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
     steps:
       - id: deployment
         uses: actions/deploy-pages@v4
+
+  # manifest.xml is all that's needed to install the add-in — Word/PowerPoint
+  # fetch everything else (icons, the task pane itself) live from GitHub
+  # Pages. Publishing it as a release asset means installing needs nothing
+  # more than downloading one file, no git clone or local build required.
+  release:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: softprops/action-gh-release@v2
+        with:
+          tag_name: latest
+          name: manifest.xml (最新)
+          body: |
+            Word / PowerPoint にサイドロードする manifest.xml です。
+
+            **インストール方法:** このファイルをダウンロードし、Word または PowerPoint の
+            「挿入」タブ →「アドイン」→「マイアドインのアップロード」から読み込んでください。
+
+            `main` に push されるたびに自動更新されます（このリリースは常に最新のコミットを指します）。
+          files: manifest.xml
+          make_latest: true
