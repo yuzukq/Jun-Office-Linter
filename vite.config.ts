@@ -14,12 +14,17 @@ export default defineConfig(({ command }) => ({
   // at the domain root, so production asset URLs need that prefix. Dev
   // stays at '/' since Vite's own server has no such subpath.
   base: command === 'build' ? '/Jun-Office-Linter/' : '/',
-  server: {
-    port: 3000,
-    strictPort: true,
-    https: {
-      key: fs.readFileSync(path.join(certDir, 'localhost.key')),
-      cert: fs.readFileSync(path.join(certDir, 'localhost.crt')),
-    },
-  },
+  // Only wired up for `vite`/`vite dev`: reading dev certs at config-eval
+  // time would break `vite build` anywhere the certs don't exist, e.g. CI.
+  server:
+    command === 'build'
+      ? undefined
+      : {
+          port: 3000,
+          strictPort: true,
+          https: {
+            key: fs.readFileSync(path.join(certDir, 'localhost.key')),
+            cert: fs.readFileSync(path.join(certDir, 'localhost.crt')),
+          },
+        },
 }))
