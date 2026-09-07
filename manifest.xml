@@ -12,12 +12,12 @@
   <DefaultLocale>ja-JP</DefaultLocale>
   <DisplayName DefaultValue="Jun Office Linter" />
   <Description DefaultValue="研究用語の誤変換（疑似/擬似 など）をWord/PowerPointでチェックし、修正候補を提案します。" />
-  <IconUrl DefaultValue="https://localhost:3000/assets/icon-64.png" />
-  <HighResolutionIconUrl DefaultValue="https://localhost:3000/assets/icon-128.png" />
-  <SupportUrl DefaultValue="https://localhost:3000" />
+  <IconUrl DefaultValue="https://yuzukq.github.io/Jun-Office-Linter/assets/icon-64.png" />
+  <HighResolutionIconUrl DefaultValue="https://yuzukq.github.io/Jun-Office-Linter/assets/icon-128.png" />
+  <SupportUrl DefaultValue="https://yuzukq.github.io/Jun-Office-Linter" />
 
   <AppDomains>
-    <AppDomain>https://localhost:3000</AppDomain>
+    <AppDomain>https://yuzukq.github.io/Jun-Office-Linter</AppDomain>
   </AppDomains>
 
   <!-- A single manifest can register the add-in for multiple hosts; both
@@ -28,7 +28,7 @@
   </Hosts>
 
   <DefaultSettings>
-    <SourceLocation DefaultValue="https://localhost:3000/index.html" />
+    <SourceLocation DefaultValue="https://yuzukq.github.io/Jun-Office-Linter/index.html" />
   </DefaultSettings>
 
   <Permissions>ReadWriteDocument</Permissions>
@@ -116,13 +116,13 @@
 
     <Resources>
       <bt:Images>
-        <bt:Image id="Icon.16" DefaultValue="https://localhost:3000/assets/icon-16.png" />
-        <bt:Image id="Icon.32" DefaultValue="https://localhost:3000/assets/icon-32.png" />
-        <bt:Image id="Icon.80" DefaultValue="https://localhost:3000/assets/icon-80.png" />
+        <bt:Image id="Icon.16" DefaultValue="https://yuzukq.github.io/Jun-Office-Linter/assets/icon-16.png" />
+        <bt:Image id="Icon.32" DefaultValue="https://yuzukq.github.io/Jun-Office-Linter/assets/icon-32.png" />
+        <bt:Image id="Icon.80" DefaultValue="https://yuzukq.github.io/Jun-Office-Linter/assets/icon-80.png" />
       </bt:Images>
       <bt:Urls>
-        <bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://localhost:3000" />
-        <bt:Url id="Taskpane.Url" DefaultValue="https://localhost:3000/index.html" />
+        <bt:Url id="GetStarted.LearnMoreUrl" DefaultValue="https://yuzukq.github.io/Jun-Office-Linter" />
+        <bt:Url id="Taskpane.Url" DefaultValue="https://yuzukq.github.io/Jun-Office-Linter/index.html" />
       </bt:Urls>
       <bt:ShortStrings>
         <bt:String id="GetStarted.Title" DefaultValue="Jun Office Linter が有効になりました" />

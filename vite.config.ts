@@ -8,8 +8,12 @@ import path from 'node:path'
 // Certs are generated once via `npx office-addin-dev-certs install`.
 const certDir = path.join(os.homedir(), '.office-addin-dev-certs')
 
-export default defineConfig({
+export default defineConfig(({ command }) => ({
   plugins: [react()],
+  // GitHub Pages serves this as a project page at /Jun-Office-Linter/, not
+  // at the domain root, so production asset URLs need that prefix. Dev
+  // stays at '/' since Vite's own server has no such subpath.
+  base: command === 'build' ? '/Jun-Office-Linter/' : '/',
   server: {
     port: 3000,
     strictPort: true,
@@ -18,4 +22,4 @@ export default defineConfig({
       cert: fs.readFileSync(path.join(certDir, 'localhost.crt')),
     },
   },
-})
+}))

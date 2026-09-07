@@ -16,41 +16,44 @@
 - PowerPoint: スライド上のシェイプのテキストはスキャンしますが、スピーカーノートおよび2階層以上ネストしたグループ内シェイプは対象外です。
 - 誤検出除外の例外リストは文字列一致ベースの簡易実装です。複雑な文脈判定はできません。
 
-## セットアップ
+## 普段使い（GitHub Pages）
+
+このアドインは完全に静的なファイルなので、`main` ブランチに push すると GitHub Actions (`.github/workflows/deploy.yml`) が自動でビルドして GitHub Pages
+(`https://yuzukq.github.io/Jun-Office-Linter/`) に公開します。`manifest.xml` はこの固定URLを指しているので、**一度サイドロードすれば、それ以降はローカルでNodeやVite devサーバーを起動する必要はありません**。PowerPointの裏でNodeが動いている、という状態を維持しなくても常に使えます。
+
+初回サイドロードは以下のどちらかで行います。
+
+- Word/PowerPoint の「挿入」タブ → 「アドイン」→「マイアドインのアップロード」から `manifest.xml` を選択
+- または `npx office-addin-debugging start manifest.xml desktop --app word` （開発サーバーは起動不要なので `--dev-server` オプションは付けない）
+
+辞書を編集してもコードの再デプロイは不要です（`localStorage` に保存されるだけなので）。コード自体（検出ロジックやUI）を変更したときだけ push すれば、数十秒後には最新版が全ホストに反映されます。
+
+手動でマニフェストの妥当性だけ確認したい場合:
+
+```sh
+npm run validate
+```
+
+## 開発（コードを変更する場合）
+
+コードを触ってすぐ確認したいときは、ローカルの Vite dev サーバーを使うと GitHub Pages へのデプロイを待たずに動作確認できます。
 
 ```sh
 npm install
 npx office-addin-dev-certs install   # 初回のみ。ローカル用HTTPS証明書を信頼済みにする
 ```
 
-## 開発サーバーの起動とサイドロード
-
-タスクペインは HTTPS で配信する必要があるため、`npm run dev` で起動する Vite サーバーは `https://localhost:3000` で待ち受けます。
-
-Word で試す場合:
-
 ```sh
-npm run start:word
+npm run start:word         # Word で試す場合
+npm run start:powerpoint   # PowerPoint で試す場合
 ```
 
-PowerPoint で試す場合:
-
-```sh
-npm run start:powerpoint
-```
-
-これらは `office-addin-debugging` 経由で、開発サーバー起動・マニフェストのサイドロード・対象アプリの起動をまとめて行います（手動で `~/Library/Containers/.../Data/Documents/wef` にマニフェストをコピーするより確実です）。
+これらは `office-addin-debugging` 経由で、開発サーバー起動・マニフェストのサイドロード・対象アプリの起動をまとめて行います。ただしこのとき `manifest.xml` の `SourceLocation` は GitHub Pages の固定URLを指したままなので、ローカルの変更を確認するには一時的に `manifest.xml` 内の URL を `https://localhost:3000` に書き換えてから実行してください（コミットはしないこと）。
 
 終了するときは:
 
 ```sh
 npm run stop
-```
-
-手動でマニフェストの妥当性だけ確認したい場合:
-
-```sh
-npm run validate
 ```
 
 ## 辞書の編集
@@ -72,10 +75,6 @@ manifest.xml   Word (Document) / PowerPoint (Presentation) 両方を宣言
 
 `core` は Word/PowerPoint どちらにも依存しない純粋なロジックなので、将来的に `.docx`/`.pptx` をオフラインで一括チェックするCLIを作る場合もここを再利用できます。
 
-## 本番ビルド
+## デプロイの仕組み
 
-```sh
-npm run build
-```
-
-`dist/` に静的ファイルが出力されます。個人利用の範囲であれば、ビルド後のファイルを配置するホスティング先を用意し、`manifest.xml` 内の `https://localhost:3000` をそのURLに置き換えれば、開発サーバーなしで常時使えるようになります（Microsoft 365アカウントでのAppSource公開は不要です）。
+`npm run build` で `dist/` に静的ファイルが出力され、`main` への push をトリガーに GitHub Actions がこれをビルドして GitHub Pages に公開します（Microsoft 365アカウントでのAppSource公開は不要です。個人利用のためリポジトリは public にしていますが、辞書データ自体はコードに含まれずローカルの `localStorage` にのみ保存されます）。
