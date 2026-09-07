@@ -1,14 +1,13 @@
 /*
-  Design note: this pane is a proofreading tool for Japanese academic text,
-  so its one signature element borrows from actual Japanese proofreading
-  marks (校正記号) — a red circle around the wrong word, an arrow to the
-  fix — rather than a generic red squiggly underline. Monospace is used
-  sparingly for counts/badges as a nod to genkō-yōshi (manuscript grid
-  paper), where one character occupies one square.
+  デザインメモ: このペインは日本語の学術文向け校正ツールなので、署名的な
+  要素として、よくある赤い波線の下線ではなく実際の日本語の校正記号
+  ——誤った語を赤い丸で囲み、矢印で修正候補を示す——を借りている。
+  等幅フォントは、原稿用紙（1文字が1マスを占める）を意識して、
+  件数・バッジなど限られた箇所にだけ使う。
 
-  --paper/--ink are light-mode defaults; theme.ts overwrites them at
-  runtime from Office.context.officeTheme so the pane matches whatever
-  Office theme (including dark mode) the host is running.
+  --paper/--ink はライトモード用のデフォルト値。theme.ts が実行時に
+  Office.context.officeTheme の値で上書きし、ホストが動かしている
+  Officeテーマ（ダークモードを含む）にペインを合わせる。
 */
 :root {
   --paper: #fbf9f4;
@@ -42,8 +41,9 @@
   }
 }
 
-/* Office stamps data-theme on the root when the user toggles theme manually;
-   it must win over the prefers-color-scheme guess in either direction. */
+/* ユーザーが手動でテーマを切り替えると、Officeはルート要素にdata-themeを
+   付与する。どちらの方向でも、prefers-color-schemeによる推測より
+   こちらを優先させる必要がある。 */
 :root[data-theme='light'] {
   --paper: #fbf9f4;
   --ink: #262220;

@@ -1,7 +1,7 @@
 import { normalize } from './normalize'
 import type { LintMatch, LintRule } from './types'
 
-/** All left-to-right, non-overlapping offsets of `needle` in `text`. */
+/** `text` 内にある `needle` の全出現位置（左から右へ、重複なしで走査）。 */
 export function findRawOffsets(text: string, needle: string): number[] {
   if (!needle) return []
   const offsets: number[] = []
@@ -16,8 +16,8 @@ export function findRawOffsets(text: string, needle: string): number[] {
 }
 
 /**
- * True if the match at `matchStart` sits inside one of `exceptions` — a
- * longer, legitimate string that happens to contain `needle`.
+ * `matchStart` の位置のマッチが `exceptions`（`needle` を含む正当な長い語）の
+ * いずれかの中に収まっている場合は true を返す。
  */
 export function isExceptionAtOffset(
   text: string,
@@ -30,7 +30,7 @@ export function isExceptionAtOffset(
   for (const rawException of exceptions) {
     const exception = normalize(rawException)
     const offsetInException = exception.indexOf(needle)
-    if (offsetInException === -1) continue // malformed exception, ignore
+    if (offsetInException === -1) continue // 不正な形式の例外語なので無視
 
     const windowStart = matchStart - offsetInException
     const windowEnd = windowStart + exception.length
@@ -43,9 +43,9 @@ export function isExceptionAtOffset(
 }
 
 /**
- * Finds every occurrence of every rule's `wrong` term in `text`.
- * Term lists here run to at most a few hundred entries, so a plain
- * indexOf loop per rule is simpler than Aho-Corasick and fast enough.
+ * `text` の中から、各ルールの `wrong` 語の出現をすべて検出する。
+ * 用語リストはせいぜい数百件程度なので、ルールごとに単純なindexOfループを
+ * 回すだけでAho-Corasickより実装がシンプルで、速度的にも十分。
  */
 export function findMatches(text: string, rules: LintRule[]): LintMatch[] {
   const normalizedText = normalize(text)

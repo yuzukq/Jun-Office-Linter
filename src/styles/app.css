@@ -32,7 +32,7 @@ button {
   min-width: 260px;
 }
 
-/* Tabs */
+/* タブ */
 
 .tabs {
   display: flex;
@@ -62,7 +62,7 @@ button {
   outline-offset: -2px;
 }
 
-/* Summary bar */
+/* サマリーバー */
 
 .summary-bar {
   display: flex;
@@ -110,7 +110,7 @@ button {
   color: var(--shu);
 }
 
-/* Scroll area */
+/* スクロール領域 */
 
 .scroll-area {
   flex: 1;
@@ -118,7 +118,7 @@ button {
   padding: 0 var(--space-4) var(--space-4);
 }
 
-/* Empty state */
+/* 空の状態 */
 
 .empty-state {
   display: flex;
@@ -130,7 +130,7 @@ button {
   color: var(--muted);
 }
 
-/* Rule group card */
+/* ルールグループのカード */
 
 .rule-group {
   border: 1px solid var(--line);
@@ -177,8 +177,8 @@ button {
   outline-offset: 2px;
 }
 
-/* The signature element: a proofreading correction mark, wrong term
-   circled, arrow to the fix. */
+/* 署名的な要素: 校正記号の修正マーク。誤った語を丸で囲み、矢印で
+   修正候補を示す。 */
 
 .correction-mark {
   display: inline-flex;
@@ -216,7 +216,7 @@ button {
   text-underline-offset: 3px;
 }
 
-/* Occurrence rows */
+/* 検出箇所の行 */
 
 .occurrence-list {
   border-top: 1px solid var(--line);
@@ -291,7 +291,7 @@ button {
   color: var(--shu);
 }
 
-/* Count badge */
+/* 件数バッジ */
 
 .count-badge {
   font-family: var(--font-mono);

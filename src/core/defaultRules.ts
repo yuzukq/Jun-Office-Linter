@@ -1,8 +1,8 @@
 import type { LintRule } from './types'
 
 /**
- * Seed rules for common IME misconversions. Edit freely from the task pane;
- * these only exist so the pane isn't empty on first launch.
+ * よくあるIME誤変換の初期ルール。タスクペインから自由に編集してよい。
+ * 初回起動時にペインが空にならないように用意しているだけのもの。
  */
 export const defaultRules: LintRule[] = [
   {

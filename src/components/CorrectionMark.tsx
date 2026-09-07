@@ -1,4 +1,4 @@
-/** The app's signature visual: a proofreading circle around the wrong term, arrow to the fix. */
+/** このアプリの署名的なビジュアル: 誤った語を校正記号の丸で囲み、矢印で修正候補を示す。 */
 export function CorrectionMark({ wrong, correct }: { wrong: string; correct: string }) {
   return (
     <span className="correction-mark">

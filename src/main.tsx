@@ -4,8 +4,9 @@ import './styles/app.css'
 import { App } from './App'
 import { syncOfficeTheme } from './styles/theme'
 
-// Mounting must wait for Office.onReady — mounting at module top level is
-// the most common "works in the browser, breaks in Word/PowerPoint" bug.
+// マウントは必ず Office.onReady を待ってから行う——モジュール直下でマウント
+// するのは「ブラウザでは動くのにWord/PowerPointでは動かない」バグの
+// 最も典型的な原因。
 Office.onReady(() => {
   syncOfficeTheme()
   createRoot(document.getElementById('root')!).render(

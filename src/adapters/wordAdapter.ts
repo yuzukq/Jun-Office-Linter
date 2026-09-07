@@ -6,11 +6,11 @@ import type { HostAdapter, Occurrence } from './types'
 const SNIPPET_RADIUS = 15
 
 /**
- * Must stay a function, not a module-level constant: App.tsx imports both
- * adapters unconditionally, and a top-level `Word.HeaderFooterType.primary`
- * reference would run at import time even when the host is PowerPoint,
- * where the global `Word` namespace isn't loaded — crashing the whole
- * bundle before React ever mounts.
+ * モジュール直下の定数ではなく、必ず関数のままにしておくこと。App.tsx は
+ * 両方のアダプタを無条件にimportしているため、トップレベルで
+ * `Word.HeaderFooterType.primary` を参照してしまうと、ホストがPowerPointで
+ * グローバルな `Word` 名前空間が読み込まれていない場合にimport時点で
+ * 例外が発生し、Reactがマウントされる前にバンドル全体がクラッシュしてしまう。
  */
 function headerFooterTypes(): Word.HeaderFooterType[] {
   return [Word.HeaderFooterType.primary, Word.HeaderFooterType.firstPage, Word.HeaderFooterType.evenPages]
@@ -22,9 +22,9 @@ interface TrackedOccurrence {
 }
 
 /**
- * Known gap: this scans the main body plus headers/footers, but not
- * footnotes/endnotes or text inside floating text boxes — Word's object
- * model doesn't surface those through `body.paragraphs`.
+ * 既知の制限: 本文とヘッダー/フッターはスキャンするが、脚注・文末脚注・
+ * floatingテキストボックス内のテキストはスキャン対象外。Wordのオブジェクト
+ * モデルではこれらが `body.paragraphs` に出てこないため。
  */
 export class WordAdapter implements HostAdapter {
   readonly hostName = 'Word'
@@ -76,9 +76,9 @@ export class WordAdapter implements HostAdapter {
             await context.sync()
 
             if (hits.items.length !== rawOffsets.length) {
-              // Should not happen (both are non-overlapping left-to-right
-              // scans of the same text), but if it ever does, skip this rule
-              // in this paragraph rather than pairing offsets with the wrong hit.
+              // 本来起こらないはず（どちらも同じテキストを左から右へ重複なく
+              // 走査しているだけ）だが、もし発生した場合は誤ったヒットと
+              // オフセットを対応付けてしまわないよう、この段落・ルールをスキップする。
               console.warn('Jun Office Linter: search/offset count mismatch, skipping', {
                 rule: rule.id,
                 hits: hits.items.length,
@@ -87,8 +87,8 @@ export class WordAdapter implements HostAdapter {
               continue
             }
 
-            // Both scans are non-overlapping and left-to-right over the same
-            // text, so rawOffsets[i] always corresponds to hits.items[i].
+            // どちらも同じテキストを左から右へ重複なく走査しているだけなので、
+            // rawOffsets[i] は必ず hits.items[i] に対応する。
             hits.items.forEach((hitRange, i) => {
               const start = rawOffsets[i]
               if (isExceptionAtOffset(text, start, needle, rule.exceptions)) return
@@ -164,7 +164,7 @@ export class WordAdapter implements HostAdapter {
           await context.sync()
         })
       } catch {
-        // underlying document range is gone; nothing to release
+        // 元のドキュメントのRangeが既に消えているので、解放するものは何もない
       }
     }
   }

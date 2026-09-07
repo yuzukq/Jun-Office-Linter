@@ -70,9 +70,9 @@ export function App() {
   async function handleApplyOne(id: string) {
     try {
       await adapter?.applyOccurrence(id)
-      // Re-scan rather than filtering the list client-side: an applied fix
-      // can shift character offsets for other pending matches in the same
-      // shape/paragraph, so the authoritative state is a fresh scan.
+      // 一覧をクライアント側でフィルタするのではなく再スキャンする: 修正を
+      // 適用すると同じシェイプ/段落内の他の未処理のマッチの文字オフセットが
+      // ずれる可能性があるため、正しい状態は常に再スキャンで得る。
       await runScan()
     } catch (err) {
       setError(`修正を適用できませんでした: ${describeError(err)}`)
@@ -99,8 +99,8 @@ export function App() {
 
   return (
     <div className="app-shell">
-      {/* No in-app title here: Office's own task pane chrome already shows
-          the add-in's DisplayName above this content. */}
+      {/* ここにアプリ側のタイトルは置かない: Office自体のタスクペインの
+          UI枠が、このコンテンツの上に既にアドインの表示名を出している。 */}
       <div className="tabs">
         <button className={`tab-button ${tab === 'check' ? 'active' : ''}`} onClick={() => setTab('check')}>
           チェック

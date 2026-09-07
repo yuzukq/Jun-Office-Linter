@@ -4,9 +4,9 @@ import type { LintRule } from './types'
 const STORAGE_KEY = 'jun-office-linter.rules.v1'
 
 /**
- * Rules live in localStorage rather than per-document settings: a
- * research-wide term list should follow the user across every Word/PowerPoint
- * file, not reset per document.
+ * ルールは文書単位の設定ではなくlocalStorageに保存する。研究テーマ全体で使う
+ * 用語集は、文書ごとにリセットされるのではなく、Word/PowerPointのどのファイルを
+ * 開いてもユーザーについてきてほしいため。
  */
 export function loadRules(): LintRule[] {
   const raw = localStorage.getItem(STORAGE_KEY)
@@ -16,7 +16,7 @@ export function loadRules(): LintRule[] {
     const parsed = JSON.parse(raw)
     if (Array.isArray(parsed)) return parsed as LintRule[]
   } catch {
-    // fall through to defaults on corrupt storage
+    // 保存データが壊れている場合はデフォルトにフォールバック
   }
   return defaultRules
 }

@@ -20,8 +20,8 @@
     <AppDomain>https://yuzukq.github.io/Jun-Office-Linter</AppDomain>
   </AppDomains>
 
-  <!-- A single manifest can register the add-in for multiple hosts; both
-       point at the same task pane, and App.tsx branches on Office.context.host. -->
+  <!-- 1つのマニフェストで複数ホストにアドインを登録できる。どちらも同じ
+       タスクペインを指しており、App.tsx側で Office.context.host によって分岐する。 -->
   <Hosts>
     <Host Name="Document" />
     <Host Name="Presentation" />

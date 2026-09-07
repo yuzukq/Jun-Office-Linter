@@ -6,10 +6,10 @@ import type { HostAdapter, Occurrence } from './types'
 const SNIPPET_RADIUS = 15
 
 /**
- * Shape.textFrame throws InvalidArgument for shape types that can't hold a
- * text frame (pictures, charts, tables, media, ...). Filtering by type
- * before ever touching `.textFrame` keeps one chart on a slide from
- * crashing the whole scan.
+ * Shape.textFrame は、テキストフレームを持てないシェイプの種類（画像・
+ * グラフ・表・メディアなど）に対しては InvalidArgument 例外を投げる。
+ * `.textFrame` に触れる前に種類でフィルタしておくことで、スライド上の
+ * グラフ1つのせいでスキャン全体がクラッシュするのを防ぐ。
  */
 const TEXT_CAPABLE_SHAPE_TYPES = new Set<string>([
   'TextBox',
@@ -21,11 +21,11 @@ const TEXT_CAPABLE_SHAPE_TYPES = new Set<string>([
 ])
 
 /**
- * Unlike Word.Range, PowerPoint.TextRange has no track()/untrack() — it
- * can't survive past the PowerPoint.run() batch that created it. So instead
- * of holding a live range, each occurrence remembers where to find it again
- * (slide + shape id, character offset) and re-derives the TextRange fresh
- * on every select/apply call.
+ * Word.Range と違い、PowerPoint.TextRange には track()/untrack() が存在せず、
+ * それを生成した PowerPoint.run() のバッチを越えて生き残れない。そのため
+ * 生きたRangeを保持する代わりに、各occurrenceは「どこにあるか」
+ * （スライドID・シェイプID・文字オフセット）だけを覚えておき、
+ * select/apply のたびにTextRangeを毎回作り直す。
  */
 interface OccurrenceLocation {
   ruleId: string
@@ -37,9 +37,9 @@ interface OccurrenceLocation {
 }
 
 /**
- * Known gaps: speaker notes, grouped shapes nested more than one level, and
- * table cell text are not scanned (tables expose text per-cell, not through
- * a shape-level textFrame).
+ * 既知の制限: スピーカーノート、2階層以上ネストしたグループ内のシェイプ、
+ * 表のセル内テキスト（表はシェイプ単位のtextFrameではなくセル単位でしか
+ * テキストを公開していない）はスキャン対象外。
  */
 export class PowerPointAdapter implements HostAdapter {
   readonly hostName = 'PowerPoint'
@@ -133,8 +133,9 @@ export class PowerPointAdapter implements HostAdapter {
     const entries = [...this.locations.entries()].filter(([id]) => id.startsWith(prefix))
     if (entries.length === 0) return 0
 
-    // Group by shape and apply right-to-left within each shape, so an
-    // earlier edit in the same shape never invalidates a later offset.
+    // シェイプ単位でグループ化し、各シェイプ内では右から左へ適用する。
+    // こうすることで、先に行った編集が同じシェイプ内の後続オフセットを
+    // 無効化してしまうことがない。
     const byShape = new Map<string, { slideId: string; shapeId: string; hits: OccurrenceLocation[] }>()
     for (const [, loc] of entries) {
       const key = `${loc.slideId}::${loc.shapeId}`
